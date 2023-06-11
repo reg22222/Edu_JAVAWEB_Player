@@ -1,0 +1,222 @@
+//////////////////////cmd로그////////////////////////////
+
+SQL*Plus: Release 18.0.0.0.0 - Production on 일 6월 11 13:17:53 2023
+Version 18.4.0.0.0
+
+Copyright (c) 1982, 2018, Oracle.  All rights reserved.
+
+사용자명 입력: system/oracle
+
+다음에 접속됨:
+Oracle Database 18c Express Edition Release 18.0.0.0.0 - Production
+Version 18.4.0.0.0
+
+SQL> alter session set "_oracle_script"=true;
+
+세션이 변경되었습니다.
+
+SQL> create user web06 identified by web06;
+
+사용자가 생성되었습니다.
+
+SQL> grant create session to web06;
+
+권한이 부여되었습니다.
+
+SQL> grant resource, connect to web06;
+
+권한이 부여되었습니다.
+
+SQL> alter user web06 default tablespace users quota unlimited on users;
+
+사용자가 변경되었습니다.
+
+SQL> conn web06/web06;
+연결되었습니다.
+SQL> show user;
+USER은 "WEB06"입니다
+
+SQL> create table test01
+(no number,
+name varchar2(20),
+tel varchar(15),
+addr varchar(50));
+
+테이블이 생성되었습니다.
+
+SQL> desc test01;
+ 이름                                      널?      유형
+ ----------------------------------------- -------- ----------------------------
+ NO                                                 NUMBER
+ NAME                                               VARCHAR2(20)
+ TEL                                                VARCHAR2(15)
+ ADDR                                               VARCHAR2(50)
+
+SQL> alter table test01 add email varchar2(50);
+
+테이블이 변경되었습니다.
+
+SQL> desc test01;
+ 이름                                      널?      유형
+ ----------------------------------------- -------- ----------------------------
+ NO                                                 NUMBER
+ NAME                                               VARCHAR2(20)
+ TEL                                                VARCHAR2(15)
+ ADDR                                               VARCHAR2(50)
+ EMAIL                                              VARCHAR2(50)
+
+
+SQL> alter table test01 modify addr varchar2(200);
+
+테이블이 변경되었습니다.
+
+SQL> desc test01;
+ 이름                                      널?      유형
+ ----------------------------------------- -------- ----------------------------
+ NO                                                 NUMBER
+ NAME                                               VARCHAR2(20)
+ TEL                                                VARCHAR2(15)
+ ADDR                                               VARCHAR2(200)
+ EMAIL                                              VARCHAR2(50)
+
+SQL> alter table test01 rename column addr to address;
+
+테이블이 변경되었습니다.
+
+SQL> desc test01
+ 이름                                      널?      유형
+ ----------------------------------------- -------- ----------------------------
+ NO                                                 NUMBER
+ NAME                                               VARCHAR2(20)
+ TEL                                                VARCHAR2(15)
+ ADDRESS                                            VARCHAR2(200)
+ EMAIL                                              VARCHAR2(50)
+
+SQL> alter table test01 drop(adrress);
+
+테이블이 변경되었습니다.
+
+SQL> desc test01;
+ 이름                                      널?      유형
+ ----------------------------------------- -------- ----------------------------
+ NO                                                 NUMBER
+ NAME                                               VARCHAR2(20)
+ TEL                                                VARCHAR2(15)
+ EMAIL                                              VARCHAR2(50)
+
+SQL> select * from tab;
+
+TNAME
+--------------------------------------------------------------------------------
+TABTYPE                     CLUSTERID
+-------------------------- ----------
+TEST01
+TABLE
+
+SQL> insert into test01(no,name,tel)
+values(1,'홍길동' ,'123-1234');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into test01(no,name)
+  2  values(2,'유재석');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> insert into test01(no,name)
+values(3,'강호동');
+
+1 개의 행이 만들어졌습니다.
+
+SQL> select no,name,tel from test01;
+
+        NO NAME
+---------- ----------------------------------------
+TEL
+------------------------------
+         1 홍길동
+123-1234
+
+         3 강호동
+
+SQL> select * from test01 where name = '유재석';
+
+        NO NAME
+---------- ----------------------------------------
+TEL
+------------------------------
+EMAIL
+--------------------------------------------------------------------------------
+         2 유재석
+
+SQL> update test01 set tel='12' where name='강호동';
+
+1 행이 업데이트되었습니다.
+
+SQL> select * from test01 where tel like '1__%';
+
+        NO NAME
+---------- ----------------------------------------
+TEL
+------------------------------
+EMAIL
+--------------------------------------------------------------------------------
+         1 홍길동
+123-1234
+
+
+
+SQL> delete from test01 where name='강호동';
+
+1 행이 삭제되었습니다.
+
+SQL> commit;
+
+커밋이 완료되었습니다.
+
+SQL> delete from test01;
+
+2 행이 삭제되었습니다.
+
+SQL> select * from tab;
+
+TNAME
+--------------------------------------------------------------------------------
+TABTYPE                     CLUSTERID
+-------------------------- ----------
+TEST01
+TABLE
+
+
+SQL> select * from test01;
+
+선택된 레코드가 없습니다.
+
+SQL> rollback;
+
+롤백이 완료되었습니다.
+
+SQL> select * from test01;
+
+        NO NAME
+---------- ----------------------------------------
+TEL
+------------------------------
+EMAIL
+--------------------------------------------------------------------------------
+         1 홍길동
+123-1234
+
+
+         2 유재석
+
+
+
+        NO NAME
+---------- ----------------------------------------
+TEL
+------------------------------
+EMAIL
+--------------------------------------------------------------------------------
+
+//////////////////////cmd로그 끝//////////////////////////

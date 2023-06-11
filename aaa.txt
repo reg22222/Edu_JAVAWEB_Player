@@ -1,0 +1,226 @@
+File I/O
+ - File클래스
+   - File(String)
+   - File(String, String)
+   - File(file, String)
+   - File(uri)
+ - byte I/O
+   - output
+     - FileOutputStream
+     - BufferedOutputStream -> 파일에 바로 쓰지 말고 버퍼메모리에 넣어서 저장
+     - DataOutputStream -> 자기가 원하는 자료형 잘라서 쓰게 해주는 것
+   - input
+     - FileInputStream
+     - BufferedInputStream
+     - DataInputStream
+
+ - text I/O
+   - output
+     - FileWriter
+     - BufferedWriter
+     - PrintWriter
+   - input
+     - FileReader
+     - BufferedReader
+ - Object I/O
+   - output
+     - FileOutputStream
+     - BufferedOutputStream
+     - ObjectOutputStream
+   - input
+     - FileInputStream
+     - BufferedInputStream
+     - ObjectInputStream
+
+문자열 나누기
+ - String의 splite()
+ - Scanner
+ - StringTokenizer
+
+
+오라클
+sqlplus
+
+system/oracle
+
+사용자계정을 만들기
+alter session set "_oracle_script"=true;
+create user web06 identified by web06;
+grant create session to web06;
+grant resource, connect to web06;
+alter user web06 default tablespace users quota unlimited on users;
+conn web06/web06;
+show user;
+
+SQL의 개요
+ - Structured Query Language
+ - DBMS상에서 데이타를 읽고 쓰고 삭제하는 등 데이타를 관리하기 위한 일종의 
+   프로그램 언어
+ - 집합적 언어(데이타를 특정 집합 단위로 분류해 이 단위별로 한번에 처리하는 언어)
+ - 1980년대 후반 RDBMS의 표준언어로 SQL을 채택
+ - DDL, DML, DCL등으로 구별하여 사용
+
+DDL(Data Definition Language) //엄밀히 말하면 객체
+ - CREATE : 테이블이나 인텍스, 뷰등 데이타베이스 객체를 생성
+ - DROP : 생성된 데이타베이스 객체를 삭제
+ - ALTER : 이미 생성된 데이타베이스 객체를 수정
+ - TRUNCATE : 테이블이나 클러스터의 데이터를 통째로 삭제
+
+DML(Data Manipulation Language) //프로그램 상에서 구현해야하는것(CRUD라고도 함)
+ - SELECT : 테이블이나 뷰에 있는 데이터 조회
+ - INSERT : 데이터를 추가
+ - UPDATE : 이미 생성된 데이터를 수정
+ - DELETE : 데이터를 삭제
+
+DCL(Data Control Language)
+ - GRANT : 사용자에게 특정 권한을 부여
+ - REVOKE : 사용자에게 부여된 권한을 회수
+
+트랜잭션 제어 TCL 트랙잭션 제어 언어
+ - COMMIT : 트랙잭션 처리, 변경된 데이터를 최종 적용 //지금까지 한거 저장하라는것
+ - ROLLBACK : 트랙잭션 처리, 변경된 데이터를 적용하지 않고 이전으로 되돌림 //마지막 커밋한걸로 돌아가
+ - SAVEPOINT : rollback 위치 지정 //말그대로 세이브 포인트, 롤백 해주는 위치로 이동
+커밋 안해주면 프롬상에서 안보여짐(DB에선 됨)
+
+PL/SQL 
+ - SQL을 절차적으로 사용할 수 있게 해주는 언어
+ - 코드와 문법이 존재하지만, 그 중심은 SQL에 있다
+ - DB프로그래밍이라는 것은 PL/SQL을 이용해 함수나 프로시저를 만들어 
+   여러 작업을 처리하는 것을 말한다
+
+
+테이블 만들기
+행 - 레코드
+열 - 컬럼
+CREATE table 테이블명(컬럼명, 자료형,.....)
+오라클에서 사용하는 자료형
+ - number
+ - char(n) - 고정자리문자열
+ - varchar2(n) - 가변자리문자열
+ - date - 날짜처리하는 자료형
+
+** 제약조건(constraints)
+not null : 반드시 해당 컬럼은 데이터를 넣어야 한다(안넣으면 오류발생)
+unique : 해당컬럼에 들어가는 값을 유일해야 한다(null값은 비교 안함)
+primary key : not null과 unique를 합친것(null값 없는 유일한 값)
+	      기본키, not null과 unique 속성을 동시에 가진 제약조건, 테이블당 1개 생성
+foreign key : 테이블간의 참조 데이터 무결성을 위한 제약조건
+check : 컬럼에 입력되는 데이터를 체크해 특정 조건에 맞는 데이터만 입려받고 그렇지 않으면 오류 발생
+	create table testCheck
+	(num number check(num between 1 and 9),
+	gender varchar2(10) check(gender in('MALE','FEMALE')));
+	이렇게 만들면 num에는 1부터 9까지 입력가능
+	gender에는 MALE이나 FEMALE만 입력가능
+
+** 시퀀스 
+ - 자동으로 순번을 반환하는 데이타베이스객체
+   특별한 로직으로 번호를 추출하는것이 아니라, 단순히 증감연산으로 
+   유일한 숫자값을 구하고자 할때 시퀀스를 사용하면 매우 편리하다
+
+** 시퀀스 만들기
+create sequence sequence명 
+increment by 증감숫자
+start with 시작숫자
+
+실습하기
+
+create table test01
+(no number,
+name varchar2(20),
+tel varchar(15),
+addr varchar(50));
+
+테이블 만들기 : create table 테이블명
+테이블 수정
+ - 컬럼추가 : alter table 테이블명 add 컬럼명 자료형;
+ - 컬럼수정 : alter table 테이블명 modify 컬럼명 자료형;
+ - 컬럼명수정 : alter table 테이블명 rename column 기존컬럼명 to 새로운컬럼명;
+ - 컬럼삭제 : alter table 테이블명 drop (컬럼명);
+테이블 삭제 : drop table 테이블명;
+
+select * from test01 where tel like '123%'; //123이 들어간 모든값을 보여주세요
+select * from test01 where tel like '%123%'; //123이 들어간 값만 보여주세요
+select * from test01 where tel like '%123';  //마지막이 123인것만 보여주세요
+
+update test01(테이블명) set tel='12' where name='강호동';
+
+select * from test01 where tel like '1__%'; // 언더바 : 어떤 값이 들어와도 괜찮은데 이 자리수 유지는 해달라는 것
+
+delete from test01 where name='강호동';
+commit; //실제 DB에 저장하게 함
+rollback
+
+오라클과 자바 연결하여 DML문 실행시키기
+오라클과 자바 연결
+1.자바 프로젝트 빌드패스(build path)에(ojdbc8.jar) 드라이브 올려주기 
+2.
+try {
+    Class.forName("oracle.jdbc.driver.OracleDriver");
+    System.out.println("오라클 드라이버 설치 성공!!");
+}catch(ClassNotFoundException e) {
+    System.out.println("오라클 드라이버 설치 실패!!");
+}
+으로 테스트 하기
+3. 드라이버 connection(연결)해주기
+
+DML문을 이용하여 자료 처리하기
+
+3가지 쿼리문 처리 클래스가 필요함
+ - 정적쿼리방식
+ - 동적쿼리방식 // PreparedStatement
+ - 구문쿼리방식
+동적쿼리방식으로만 공부할것
+
+//////////////////////////////////////////////////////////////////
+선수관리프로그램을 작성하여 봅니다.
+선수table
+ - 번호 : num, number, primary key
+ - 이름 : name, varchar2(20)
+ - 포지션 : position, varchar2(50)
+ - 연봉 : salary, number
+ - 팀명 : teamName, varchar2(10)
+
+1.선수등록 2.선수보기 3.선수삭제 4.연봉수정 5.팀옮기기 6.종료 : 
+선수등록시 이름,포지션,연봉,팀명을 입력받아 값을 저장
+(단, 번호는 시퀀스에 의해 저장)
+선수보기시 팀명을 입력받아 해당하는 팀의 선수만 출력
+(단, 모두를 입력하면 전체나오게 해준다)
+선수삭제시 번호를 입력받아 해당하는 선수 삭제
+연봉수정시 번호를 입력받아 해당하는 선수의 연봉을 수정
+팀옮기기시 번호를 입력받아 해당하는 선수의 팀을 수정
+종료시 프로그램을 종료합니다 메세지 후 종료
+모든 데이터는 DB를 만들어 DB에 저장하고 수정하고 DB에서 꺼내서 처리하도록 한다
+
+===================================
+create table player
+(num number primary key,
+name varchar2(20) not null,
+position varchar2(5) not null,
+salary number default 0,
+teamName varchar2(10));
+===================================
+
+create sequence player_seq;
+(시퀀스의 시작값고 증가값이 1일때는 생략가능하다)
+===================================
+
+DTO 만들고,
+Main을 만들고,
+실제 실행을 할 클래스를 만들고,
+DAO를 만들어 DB에서 실행할 내용을 만들어 준다.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
